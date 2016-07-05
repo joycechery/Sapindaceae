@@ -1,0 +1,24 @@
+###Create a avergae coverage/gene file from .bam file produced by https://github.com/joycechery/Sapindaceae/AlignTranscriptometoSelectedGenomeSequences
+
+use File::Slurp 'read_file';
+
+my $home = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/';
+my $genesFile = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/GeneNames';
+my $covFile = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/JCSR/CoverageFile_PerPositions';
+
+my @genes = read_file $genesFile;
+
+foreach my $genes(@genes){
+    chomp $genes;
+    
+    #this will print average coverage to the screen
+	   my $avgCov = `grep $genes $covFile | awk \'{sum+=\$3}END{print sum/NR }\'`;
+	   chomp $avgCov;
+	   print "$genes\t$avgCov\n";
+	}
+
+####Select Genes with More Than 20x coverage
+awk '$2>20' CoverageFile_PerGene > CoverageFile_MoreThan20x
+awk '{print $1}' CoverageFile_MoreThan20x > 20Xgenes
+perl selectseq.pl -in PlastidGenesRemoved.fa -out PlastidGenesRemoved_20Xcov.fa  -idfile 20Xgenes
+
