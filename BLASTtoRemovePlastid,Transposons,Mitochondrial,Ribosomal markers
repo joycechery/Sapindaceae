@@ -1,0 +1,13 @@
+###### After blasting all sequences to using Megablast NCBI databse Organis: Spermatophyta, compile a master list to search for hits that #
+##### have an annotation of plastid, chloroplast, mitocondial, ribosomal or transposable elements  #
+grep -i -P 'Query=|plastid|chloro|mitochond|ribo|transpos' Complete_Blast_Hits.txt  | grep -i -P -B 'plastid|chloro|mitochond|ribo|transpos' | grep -i 'Query=' > NCBI_PlastidGenesto_Remove
+
+#remove seqs with above blast hit annotations
+perl selectseq.pl -in JCSR.covMask.fasta -out PlastidGenesRemoved.fa -idfile NCBI_PlastidGenesto_Remove
+rm InPlastidGenesRemoved.fa 
+mv NotPlastidGenesRemoved.fa  PlastidGenesRemoved.fa 
+
+#After compiled a list of available Sapindales plastomes, mitochodrial genome and Arabidopsis chloroplast, blast seqs to this to double check 
+makeblastdb -dbtype nucl -in Sapindales_plastomes.fa -parse_seqids -hash_index -out Sapindales_plastomes.database
+blastn -db Sapindales_plastomes.database -outfmt 6 -evalue 1e-3 -word_size 8 -show_gis -num_alignments 20 -max_hsps 20 -num_threads 5 -out SapindalesBlast.txt -query PlastidGenesRemoved.fa
+=no hits
