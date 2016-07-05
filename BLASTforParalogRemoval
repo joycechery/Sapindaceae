@@ -1,0 +1,21 @@
+#####BLAST sequences back to all Citrus CDS to remove any possible duplicates
+
+makeblastdb -dbtype nucl -in Csinensis_v1.0_cds.fa -parse_seqids -hash_index -out Original_CDS.database
+blastn -db Original_CDS.database -outfmt 6 -evalue 1e-3 -word_size 8 -show_gis -num_alignments 20 -max_hsps 20 -num_threads 5 -out BlastOriginal.txt -query JCSR.covMask.fasta
+awk '{print $1}' BlastOriginal.txt > Col1
+awk '{print $2}' BlastOriginal.txt > Col2
+paste Col1 Col2 > Col3
+sort Col3 | awk '$1==2' | uniq > Original_BlastOriginal_OnlyBlasttoSelf
+awk '{print $1}' Original_BlastOriginal_OnlyBlasttoSelf > BlastOriginal_OnlyBlasttoSelf
+
+
+#####COVBLAST TO SELF to remove any possible duplicates 
+
+makeblastdb -dbtype nucl -in JCSR.covMask.fasta -parse_seqids -hash_index -out SelfBlast.database
+blastn -db SelfBlast.database -outfmt 6 -evalue 1e-3 -word_size 8 -show_gis -num_alignments 20 -max_hsps 20 -num_threads 5 -out SelfBlast2.txt -query JCSR.covMask.fasta
+awk '{print $1}' SelfBlast2.txt > Col1
+awk '{print $2}' SelfBlast2.txt > Col2
+paste Col1 Col2 > Col3
+sort Col3 | awk '$1==2' | uniq > SelfBlast
+awk '{print $1}' SelfBlast > SelfBlast_OnlytoSelf
+= 3739
