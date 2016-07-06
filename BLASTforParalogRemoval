@@ -18,4 +18,3 @@ awk '{print $2}' SelfBlast2.txt > Col2
 paste Col1 Col2 > Col3
 sort Col3 | awk '$1==2' | uniq > SelfBlast
 awk '{print $1}' SelfBlast > SelfBlast_OnlytoSelf
-= 3739
