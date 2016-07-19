@@ -14,3 +14,12 @@ awk '$5>500&&$5<1100' singlemRNAintrons >> singlemRNAintrons_small
 
 ##unique and sort through small introns list to generate a list of sequences to Align transcriptome reads to
 sort singlemRNAintrons_small | uniq | awk '{print $1}' > singlemRNAintrons_small_uniq
+
+#convert genome fasta file from interleaved to sequential
+perl -MBio::SeqIO -e 'my $seqin = Bio::SeqIO->new(-fh => \*STDIN, -format => 'fasta'); while (my $seq = $seqin->next_seq) { print ">",$seq->id,"\n",$seq->seq,"\n"; }' < Csinensis_v1.0_cds.fa > Csinensis_v1.0_cds_seqs.fa
+
+#alter sequence names for ease of downstream processing
+awk '{FS ="|"}{print $1}' Csinensis_v1.0_cds_seqs.fa > Csinensis_v1.0_cds_orangeNames.fa
+
+#select sequences from list of single isoform seqs with introns 500-1100
+perl selectseq.pl -in Csinensis_v1.0_cds_orangeNames.fa -out SelectedCitrusSeqs.fa -idfile singlemRNAintrons_small_uniq 
