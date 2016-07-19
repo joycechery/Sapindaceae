@@ -19,4 +19,3 @@ paste Col1 Col2 > Col3
 sort Col3 | awk '$1==2' | uniq > SelfBlast
 awk '{print $1}' SelfBlast > SelfBlast_OnlytoSelf
 
-##did an additional blast against all possible sapindaceae plastomes and mitochondiral genome
