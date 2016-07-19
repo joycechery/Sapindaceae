@@ -1,2 +1,2 @@
-sed '/^@SRR412534/ s/SRR412534.[0-9]* //' /clusterfs/vector/scratch/cdspecht/Joyce_Chery/Data/Dimocarpus_Transcriptome/SRR412534_1.fastq | sed '/^@A807H/ s/ length=90/\/1/g' | sed '/^+SRR412534/ s/.*/\+/' > JCSR_R1.fq
-sed '/^@SRR412534/ s/SRR412534.[0-9]* //' /clusterfs/vector/scratch/cdspecht/Joyce_Chery/Data/Dimocarpus_Transcriptome/SRR412534_2.fastq | sed '/^@A807H/ s/ length=90/\/2/g' | sed '/^+SRR412534/ s/.*/\+/' > JCSR_R2.fq
+sed '/^@SRR412534/ s/SRR412534.[0-9]* //' SRR412534_1.fastq | sed '/^@A807H/ s/ length=90/\/1/g' | sed '/^+SRR412534/ s/.*/\+/' > JCSR_R1.fq
+sed '/^@SRR412534/ s/SRR412534.[0-9]* //' SRR412534_2.fastq | sed '/^@A807H/ s/ length=90/\/2/g' | sed '/^+SRR412534/ s/.*/\+/' > JCSR_R2.fq
