@@ -1,5 +1,5 @@
-#### After blasting all sequences to using Megablast NCBI databse Organis: Spermatophyta, compile a master list to search for hits that #
-##### have an annotation of plastid, chloroplast, mitocondial, ribosomal or transposable elements  #
+###Using NCBI Megablast database Organism: Spermatophyta, compile a master list "Complete_Blast_Hits.txt" to search for hits that #
+#### have an annotation of plastid, chloroplast, mitocondial, ribosomal or transposable elements  #
 grep -i -P 'Query=|plastid|chloro|mitochond|ribo|transpos' Complete_Blast_Hits.txt  | grep -i -P -B 'plastid|chloro|mitochond|ribo|transpos' | grep -i 'Query=' > NCBI_PlastidGenesto_Remove
 
 #remove seqs with above blast hit annotations
@@ -7,8 +7,9 @@ perl selectseq.pl -in JCSR.covMask.fasta -out PlastidGenesRemoved.fa -idfile NCB
 rm InPlastidGenesRemoved.fa 
 mv NotPlastidGenesRemoved.fa  PlastidGenesRemoved.fa 
 
-##compiled a list of the following plastomes and mitochondiral from the following taxa "Sapindales_plastomes.fa"##
+##compiled a list of the following plastomes and mitochondiral from the following taxa "Sapindales_plastomes.fa":##
 #Citrus sinensis chloroplast, Azadirachta indica chloroplast, Citrus aurantiifolia chloroplast,Sapindus mukorossi chloroplast,Arabidopsis mitochondrial,Arabiodopsis chloroplast##
+#Blast to this list for last check of plastomes seqs
 makeblastdb -dbtype nucl -in Sapindales_plastomes.fa -parse_seqids -hash_index -out Sapindales_plastomes.database
 blastn -db Sapindales_plastomes.database -outfmt 6 -evalue 1e-3 -word_size 8 -show_gis -num_alignments 20 -max_hsps 20 -num_threads 5 -out SapindalesBlast.txt -query PlastidGenesRemoved.fa
 =no hits
