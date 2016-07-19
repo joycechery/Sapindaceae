@@ -46,7 +46,7 @@ foreach my $lib (@lib){
     my $clean1 = $fastqDir . $lib . '_1_final.txt';
     my $clean2 = $fastqDir . $lib . '_2_final.txt';
     my $cleanu = $fastqDir . $lib . '_u_final.txt';
-    my $refs = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/Final_CitrusGenes.fa';
+    my $refs = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/SelectedCitrusSeqs.fa';
      my $dict = substr ($refs, 0, -2) . 'dict';
     my $indexed_assemblies_in_target =  substr ($refs, 0, -2) . "nix";
     my $bam =  $dir . $lib . '_m2n240_4.bam';
