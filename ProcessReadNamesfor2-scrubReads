@@ -1,4 +1,0 @@
-sed '/^@SRR412534/ s/SRR412534.[0-9]* //' SR_1.fastq | sed '/@A807H/ s/ length=90/\\/1/g' | sed '/^+SRR4125
-34/ s/.*/\+/' > JCSR_R1.fq
-sed '/^@SRR412534/ s/SRR412534.[0-9]* //' SR_2.fastq | sed '/@A807H/ s/ length=90/\\/2/g' | sed '/^+SRR4125
-34/ s/.*/\+/' > JCSR_R2.fq
