@@ -1,7 +1,7 @@
 ########################################################################################################
 ########################################################################################################
 # script to align Dimocarpus lognan transcriptome reads to Citrus Genome, Call SNPs and make consensus sequences closer to Sapindaceae#
-# by written by Chodon Sass chodon at gmail.com, 2015
+#  written by Chodon Sass chodon at gmail.com, 2015
 ########################################################################################################
 
 #!/Usr-/bin/perl -w
