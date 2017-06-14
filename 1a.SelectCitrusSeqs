@@ -8,10 +8,12 @@ paste mrnaNames intronsize > mrnaIntronSize
 sort mrnaNames | uniq -c | sort | awk '$1<2' | awk '{print $2}' > singlemrnaNames
 grep -f singlemrnaNames  mrnaIntronSize > singlemRNAintrons
 
-##sort for mrna with introns of 500-1100 base pairs according to intron file
+#get how many columns are in the intron size file
+awk '{print NF}' singlemRNAintrons | sort -nu | tail -n 1
+##sort for mrna with introns of 500-1100 base pairs according to intron file for each column 
 awk '$4>500&&$4<1000' singlemRNAintrons >> singlemRNAintrons_small  
 awk '$5>500&&$5<1100' singlemRNAintrons >> singlemRNAintrons_small  
-##... do this for however many columns necessary.
+##Do this for as many columns as necessary 
 
 ##unique and sort through small introns list to generate a list of sequences to Align transcriptome reads to
 sort singlemRNAintrons_small | uniq | awk '{print $1}' > singlemRNAintrons_small_uniq
