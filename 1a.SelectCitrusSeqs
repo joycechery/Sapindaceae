@@ -1,4 +1,4 @@
-##get the intron sizes for each mrna (**)
+##get the intron sizes for each mrna 
 grep 'mRNA' Csinensis_v1.0_gene.gff3 | awk '{print $9}' | awk 'BEGIN{FS= ";"}{print $4}'| sed 's/Parent=//' | sed 's/m.g/m/' > mrnaNames
 perl get_intronsize.pl Csinensis_v1.0_gene.gff3  > intronsize
 paste mrnaNames intronsize > mrnaIntronSize
@@ -10,7 +10,7 @@ grep -f singlemrnaNames  mrnaIntronSize > singlemRNAintrons
 ##sort for mrna with introns of 500-1100 base pairs according to intron file
 awk '$4>500&&$4<1000' singlemRNAintrons >> singlemRNAintrons_small  
 awk '$5>500&&$5<1100' singlemRNAintrons >> singlemRNAintrons_small  
-##... do this for however many columns necessary
+##... do this for however many columns necessary.
 
 ##unique and sort through small introns list to generate a list of sequences to Align transcriptome reads to
 sort singlemRNAintrons_small | uniq | awk '{print $1}' > singlemRNAintrons_small_uniq
@@ -22,4 +22,6 @@ perl -MBio::SeqIO -e 'my $seqin = Bio::SeqIO->new(-fh => \*STDIN, -format => 'fa
 awk '{FS ="|"}{print $1}' Csinensis_v1.0_cds_seqs.fa > Csinensis_v1.0_cds_orangeNames.fa
 
 #select sequences from list of single isoform seqs with introns 500-1100
+## selectseq.pl can be found at https://github.com/josephhughes/Sequence-manipulation/blob/master/SelectSeq.pl)  
 perl selectseq.pl -in Csinensis_v1.0_cds_orangeNames.fa -out SelectedCitrusSeqs.fa -idfile singlemRNAintrons_small_uniq 
+
