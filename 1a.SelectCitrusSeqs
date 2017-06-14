@@ -1,5 +1,6 @@
-##get the intron sizes for each mrna. This step requires get_intron_size.pl which is located here https://github.com/joycechery/Sapindaceae/blob/master/1b.get_intron_size.pl
+##get the intron sizes for each mrna.
 grep 'mRNA' Csinensis_v1.0_gene.gff3 | awk '{print $9}' | awk 'BEGIN{FS= ";"}{print $4}'| sed 's/Parent=//' | sed 's/m.g/m/' > mrnaNames
+#extract intron sequence using script from https://github.com/joycechery/Sapindaceae/blob/master/1b.get_intron_size.pl
 perl get_intronsize.pl Csinensis_v1.0_gene.gff3  > intronsize
 paste mrnaNames intronsize > mrnaIntronSize
 
