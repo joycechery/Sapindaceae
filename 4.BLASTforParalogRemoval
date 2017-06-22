@@ -5,7 +5,7 @@ blastn -db Original_CDS.database -outfmt 6 -evalue 1e-3 -word_size 8 -show_gis -
 awk '{print $1}' BlastOriginal.txt > Col1
 awk '{print $2}' BlastOriginal.txt > Col2
 paste Col1 Col2 > Col3
-sort Col3 | awk '$1==$2' | uniq > Original_BlastOriginal_OnlyBlasttoSelf
+sort Col3 | awk '$1==2' | uniq > Original_BlastOriginal_OnlyBlasttoSelf
 awk '{print $1}' Original_BlastOriginal_OnlyBlasttoSelf > BlastOriginal_OnlyBlasttoSelf
 
 
