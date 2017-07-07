@@ -1,0 +1,7 @@
+####These steps create a coverage per position file for the filtered consensus sequences 
+#make list ofconsensus sequence names
+grep '>' LocalBlastRemoveNCBIRemove.fa | sed 's/>//' > LocalBlastRemoveNCBIRemove_Names
+#create a coverage per position file from the .bam file produced by Alignfix -> this will be all consensus seqs pre filtering
+genomecov -ibam JCSR.new2.bam -d -split > JCSR.positioncoverage
+#make a coverage per position file for filtered consensus sequences 
+grep -f LocalBlastRemoveNCBIRemove_Names JCSR.positioncoverage > LocalBlastRemoveNCBIRemove_PositionCoverage
