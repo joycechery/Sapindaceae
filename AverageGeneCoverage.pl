@@ -1,5 +1,3 @@
-###Create a avergae coverage/gene file from .bam file produced by AlignFix
-
 use File::Slurp 'read_file';
 
 my $home = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/';
@@ -15,9 +13,4 @@ foreach my $genes(@genes){
         chomp $avgCov;
         print "$genes\t$avgCov\n";
 	    }
-
-####Select Genes with More Than 20x coverage
-awk '$2>20' CoverageFile_PerGene > CoverageFile_MoreThan20x
-awk '{print $1}' CoverageFile_MoreThan20x > 20Xgenes
-perl selectseq.pl -in PlastidGenesRemoved.fa -out PlastidGenesRemoved_20Xcov.fa  -idfile 20Xgenes
 
