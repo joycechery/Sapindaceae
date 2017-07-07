@@ -1,4 +1,4 @@
-###Create a avergae coverage/gene file from ****.bam file produced by https://github.com/joycechery/Sapindaceae/AlignTranscriptometoSelectedGenomeSequences
+###Create a avergae coverage/gene file from .bam file produced by AlignFix
 
 use File::Slurp 'read_file';
 
