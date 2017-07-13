@@ -1,0 +1,17 @@
+###Written by Chodon Sass, 2017
+###note that need to make all names lower case before run astral
+
+##for each gene region:
+raxmlHPC-SSE3 -n gene -s gene.phy -p 12345 -x 12345 -N 1000 -f a -m GTRGAMMA  
+$BINNING_HOME/makecommands.compatibility.sh genes_dir 50 pairwise_output_dir RAxML_bipartitions.result
+sh commands.compat.50.genes_dir
+cd pairwise_output_dir/
+ls | grep -v ge | sed 's/.50$//g' > genes
+python $BINNING_HOME/cluster_genetrees.py genes 50
+cd ..
+$BINNING_HOME/build.supergene.alignments.sh pairwise_output_dir genes_dir supergenes_output_directory
+
+##for each supergene
+raxmlHPC-SSE3 -n result -s supergene.fasta -q supergene.part -p 12345 -x 12345 -N 1000 -f a -m GTRGAMMA
+cat supergenes_output_directory/bin.*.txt/RAxML_bipartitions.* > 6MLTrees.txt
+java -Xmx8000M -jar astral.4.7.8.jar -i 6MLTrees.txt  -b bs_paths -r 1000
