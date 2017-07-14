@@ -1,0 +1,48 @@
+
+###BLAST consensus sequences to the full Citrus sinensis CDS to remove putative paralogs
+##create local BLAST databases and perform blast 
+makeblastdb -dbtype nucl -in Csinensis_v1.0_cds_orangeNames.fa  -parse_seqids -hash_index -out JCSR.originalcds.database
+blastn -db JCSR.originalcds.database -outfmt 6 -out blasttoOrginal.txt -query JCSR.covMask.fasta
+
+##OPTIONAL. This checks if all genes at least blast to themselves.
+awk '{print $1}' blasttoOrginal.txt > col1
+awk '{print $2}' blasttoOrginal.txt > col2
+paste col1 col2 > col3
+awk '$1==$2' col3 | sort | uniq | wc -l 
+
+
+##CRITICAL: Blast consensus sequences to the full Citrus sinensis CDS to remove putative paralogs.
+awk '$1!=$2' col3 | sort | uniq > remove
+awk '{print $1}' remove > remove1
+awk '{print $2}'  remove > remove2
+#because this is a recirpocal blast, this list will contain ALL putative dups in the citrus genome- not just from the query fasta
+cat remove1 remove2 | sort | uniq > originalblastGenestoRemove
+rm remove*
+rm col*
+
+####BLAST consensus sequences to themselves to remove putative paralogs.
+##create local BLAST databases and perform BLAST
+makeblastdb -dbtype nucl -in JCSR.covMask.fasta  -parse_seqids -hash_index -out JCSR.blasttoSelf.database
+blastn -db JCSR.blasttoSelf.database -outfmt 6 -out blasttoSelf.txt -query JCSR.covMask.fasta
+
+##OPTIONAL. This checks if all genes at least blast to themselves.
+awk '{print $1}' blasttoSelf.txt > col1
+awk '{print $2}' blasttoSelf.txt > col2
+paste col1 col2 > col3
+awk '$1==$2' col3 | sort | uniq | wc -l
+
+##CRITICAL: Blast consensus sequences to the themselves to remove putative paralogs.
+awk '$1!=$2' col3 | sort | uniq > remove
+awk '{print $1}' remove > remove1
+awk '{print $2}'  remove > remove2
+cat remove1 remove2 | sort | uniq > selfblastGenestoRemove
+rm remove*
+rm col*
+
+##Combine list of genes that dont only blast to self.
+cat selfblastGenestoRemove originalblastGenestoRemove > LocalBlastGenestoRemove
+
+#Select these sequences out of the consensus sequence list and remove them.
+perl selectseq.pl -in JCSR.covMask.fasta -out LocalBlastRemove.fa -idfile LocalBlastGenestoRemove
+rm InLocalBlastRemove.fa
+mv NotLocalBlastRemove.fa LocalBlastRemove.fa
