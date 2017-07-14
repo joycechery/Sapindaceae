@@ -1,3 +1,5 @@
+#### Written by Chodon Sass, 2016 ####
+
 use File::Slurp 'read_file';
 
 my $home = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/';
