@@ -1,6 +1,7 @@
 
 ###BLAST consensus sequences to the full Citrus sinensis CDS to remove putative paralogs
 ##create local BLAST databases and perform blast 
+module load blast/2.6.0 
 makeblastdb -dbtype nucl -in Csinensis_v1.0_cds_orangeNames.fa  -parse_seqids -hash_index -out JCSR.originalcds.database
 blastn -db JCSR.originalcds.database -outfmt 6 -out blasttoOrginal.txt -query JCSR.covMask.fasta
 
