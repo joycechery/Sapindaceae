@@ -1,0 +1,31 @@
+###BLAST to full NCBI website to remove non-nuclear loci 
+##The consensus sequence list was broken up into groups of about 200-500 sequences.
+##Each subset was individually BLAST using the website with the following setting:
+#Organism: Spermophyta and MegaBlast - somewhat similar
+#Download the first .txt option of BLAST hit results from NCBI website. Placed file on Desktop.
+#Uploaded BLAST results back to the server using sftp put command
+
+##The following steps removes consensus sequences that BLAST to non-nulear loci
+#combined BLAST results from the subset runs - "NCBIBlastHits.txt"
+grep -i -P 'Query=|plastid|chloro|mitochond|ribo|transpos' NCBIBlastHits.txt  | grep -i -P -B 1 'plastid|chloro|mitochond|ribo|transpos' | grep -i 'Query=' > RemoveNCBIBlast
+sed 's/Query= //' RemoveNCBIBlast | sort | uniq > NCBIBlastGenestoRemove
+
+#Select these sequences out of the consensus sequence list and remove them.
+perl selectseq.pl -in LocalBlastRemove.fa -out LocalBlastRemoveNCBIRemove -idfile NCBIBlastGenestoRemove
+rm InLocalBlastRemoveNCBIRemove
+mv NotLocalBlastRemoveNCBIRemove LocalBlastRemoveNCBIRemove.fa
+
+#Downloadeded the following Sapindales Plastomes from www.ncbi.nlm.nih.gov and compiled a fasta file "Sapindales_Plastome"
+#Sapindus mukorossi chloroplast, complete genome NC_025554.
+#Citrus aurantiifolia chloroplast, complete genome NC_024929.1
+#Arb_Chloroplast_Genome*** FIND THIS ACCESSION
+#Azadirachta_Chloroplast** FIND THIS ACCESSION
+#Arb.mitochondial_genome** FIND THIS ACCESSION
+#Citrus_chloroplast** FIND THIS ACCESSION
+#Citrus sinensis chloroplast, Azadirachta indica chloroplast, Citrus aurantiifolia chloroplast,Sapindus mukorossi chloroplast,Arabidopsis mitochondrial,Arabiodopsis chloroplast##
+
+####BLAST consensus sequences to Sapindales plastomes
+##create local BLAST databases and perform BLAST
+makeblastdb -dbtype nucl -in Sapindales_Plastomes  -parse_seqids -hash_index -out JCSR.Sapindales_Plastomes.database
+blastn -db JCSR.Sapindales_Plastomes.database -outfmt 6 -out SapindalesBlast.txt -query LocalBlastRemoveNCBIRemove.fa
+
