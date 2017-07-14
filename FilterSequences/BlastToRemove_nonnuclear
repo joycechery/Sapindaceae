@@ -26,6 +26,7 @@ mv NotLocalBlastRemoveNCBIRemove LocalBlastRemoveNCBIRemove.fa
 
 ####BLAST consensus sequences to Sapindales plastomes
 ##create local BLAST databases and perform BLAST
+module load blast/2.6.0 
 makeblastdb -dbtype nucl -in Sapindales_Plastomes  -parse_seqids -hash_index -out JCSR.Sapindales_Plastomes.database
 blastn -db JCSR.Sapindales_Plastomes.database -outfmt 6 -out SapindalesBlast.txt -query LocalBlastRemoveNCBIRemove.fa
 
