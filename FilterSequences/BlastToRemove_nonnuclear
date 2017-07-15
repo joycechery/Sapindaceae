@@ -16,13 +16,7 @@ rm InLocalBlastRemoveNCBIRemove
 mv NotLocalBlastRemoveNCBIRemove LocalBlastRemoveNCBIRemove.fa
 
 #Downloadeded the following Sapindales Plastomes from www.ncbi.nlm.nih.gov and compiled a fasta file "Sapindales_Plastome"
-#Sapindus mukorossi chloroplast, complete genome NC_025554.
-#Citrus aurantiifolia chloroplast, complete genome NC_024929.1
-#Arb_Chloroplast_Genome*** FIND THIS ACCESSION
-#Azadirachta_Chloroplast** FIND THIS ACCESSION
-#Arb.mitochondial_genome** FIND THIS ACCESSION
-#Citrus_chloroplast** FIND THIS ACCESSION
-#Citrus sinensis chloroplast, Azadirachta indica chloroplast, Citrus aurantiifolia chloroplast,Sapindus mukorossi chloroplast,Arabidopsis mitochondrial,Arabiodopsis chloroplast##
+#Citrus sinensis chloroplast, Azadirachta indica chloroplast, Citrus aurantiifolia chloroplast, Sapindus mukorossi chloroplast, Arabidopsis mitochondrial, Arabiodopsis chloroplast##
 
 ####BLAST consensus sequences to Sapindales plastomes
 ##create local BLAST databases and perform BLAST
