@@ -41,9 +41,9 @@ rm remove*
 rm col*
 
 ##Combine list of genes that dont only blast to self.
-cat selfblastGenestoRemove originalblastGenestoRemove > LocalBlastGenestoRemove
+cat selfblastGenestoRemove originalblastGenestoRemove | sort | uniq > LocalBlastGenestoRemove
 
 #Select these sequences out of the consensus sequence list and remove them.
-perl selectseq.pl -in JCSR.covMask.fasta -out LocalBlastRemove.fa -idfile LocalBlastGenestoRemove
+perl selectSeqs.pl -in JCSR.covMask.fasta -out LocalBlastRemove.fa -idfile LocalBlastGenestoRemove
 rm InLocalBlastRemove.fa
 mv NotLocalBlastRemove.fa LocalBlastRemove.fa
