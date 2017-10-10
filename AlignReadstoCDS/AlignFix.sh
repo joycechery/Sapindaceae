@@ -1,24 +1,25 @@
 #!/bin/bash -l
-#SBATCH --job-name=Align
-#SBATCH --partition=vector
-#SBATCH --qos=vector_batch
-#SBATCH --gid=vector_spechtlab
-#SBATCH --mail-user=chery.joyce@berkeley.edu
+#SBATCH --job-name=af_jc
+#SBATCH --partition=savio2_htc
+#SBATCH --account=co_rosalind
+#SBATCH --qos=rosalind_htc2_normal
+#SBATCH --mail-user=chodon@berkeley.edu
 #SBATCH --mail-type=ALL
-#SBATCH --mem-per-cpu=20G
-#SBATCH --time=299:99:00 
+#SBATCH --mem-per-cpu=12G
+#SBATCH --cpus-per-task=1
+#SBATCH --time=72:00:00 
 
-cd /clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/
+cd /clusterfs/rosalind/users/chodon/joyce
 
-export PERL5LIB=/global/home/users/cdspecht/bin/vcftools_0.1.12b/perl/
+export PERL5LIB=/global/home/users/chodon/bin/vcftools_0.1.12a/perl/:/global/home/users/chodon/perl5/lib/perl5/
 
 source /usr/Modules/init/bash
 
 module load bedtools
-module load samtools
+module load samtools/0.1.19
 module load jdk
 module load python
 
-perl Alignfix.pl
+perl AlignFix.pl
 
 exit
