@@ -1,3 +1,4 @@
+
 ########################################################################################################
 ########################################################################################################
 # script to align Dimocarpus lognan transcriptome reads to Citrus Genome, Call SNPs and make consensus sequences closer to Sapindaceae#
@@ -7,46 +8,33 @@
 #!/Usr-/bin/perl -w
  use warnings;
 use strict;
-use lib "/global/home/users/cdspecht/perl5/lib/perl5";
 use Bio::SeqIO;
-use Getopt::Std;
+
 
 ##define libraries, home directory and extension to home directory plus library where bams and vcfs are
-#  my %opts = (H=>undef, G=>undef); 
-#  getopts('/clusterfs/vector/scratch/cdspecht/Joyce_Chery/.$lib./myvfs/', \%opts);
-#my @lib = qw(JCSR);
-
-#my $novoalign = '/clusterfs/vector/home/users/cdspecht/chodon/programs/novocraft/novoalign';#!/usr/bin/perl -w
-
-##define libraries, home directory and extension to home directory plus library where bams and vcfs are
-#my %opts = (H=>undef, G=>undef); 
-#getopts('/clusterfs/vector/scratch/cdspecht/Joyce_Chery/.$lib./myvfs/', \%opts);
-my @lib = qw(JCSR);
-
-my $novoalign = '/global/home/users/cdspecht/bin/novoalign';
-my $novoindex = '/global/home/users/cdspecht/bin/novoindex';
-my $gatk = '/global/home/users/cdspecht/bin/GenomeAnalysisTK.jar';
-my $markDups = '/global/home/users/cdspecht/bin/MarkDuplicates.jar';
-my $createDict = '/global/home/users/cdspecht/bin/CreateSequenceDictionary.jar';
-my $readGroups = '/global/home/users/cdspecht/bin/AddOrReplaceReadGroups.jar';
 
 my @lib = qw(JCSR);
-#my $home = $opts{H};
-#my $vcfs = $opts{G};
-my $home = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/';
-my $selectseqs = '/global/home/users/cdspecht/bin/selectseqs.pl'; 
+
+my $novoalign = '/global/home/users/chodon/bin/novocraft/novoalign';
+my $novoindex = '/global/home/users/chodon/bin/novocraft/novoindex';
+my $gatk = '/global/home/users/chodon/bin/GenomeAnalysisTK.jar';
+my $markDups = '/global/home/users/chodon/bin/MarkDuplicates.jar';
+my $createDict = '/global/home/users/chodon/bin/CreateSequenceDictionary.jar';
+my $readGroups = '/global/home/users/chodon/bin/AddOrReplaceReadGroups.jar';
+
+my $home = '/clusterfs/rosalind/users/chodon/joyce/';
+my $selectseqs = 'selectSeqs.pl'; 
 
 ###### start going through libraries
 
 foreach my $lib (@lib){
-    my $dir = $home . $lib . '/';
+    my $dir = $home;
     my $tempDir = $dir . 'temp/';
     mkdir ($tempDir) unless -d ($tempDir);
-    my $fastqDir = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/';
-    my $clean1 = $fastqDir . $lib . '_1_final.txt';
-    my $clean2 = $fastqDir . $lib . '_2_final.txt';
-    my $cleanu = $fastqDir . $lib . '_u_final.txt';
-    my $refs = '/clusterfs/vector/scratch/cdspecht/Joyce_Chery/final/FINAL_ALIGNMENT/SelectedCitrusSeqs.fa';
+    my $clean1 = $dir . $lib . '_1_final.txt';
+    my $clean2 = $dir . $lib . '_2_final.txt';
+    my $cleanu = $dir . $lib . '_u_final.txt';
+    my $refs = $dir . 'refs_JGC.fa';
      my $dict = substr ($refs, 0, -2) . 'dict';
     my $indexed_assemblies_in_target =  substr ($refs, 0, -2) . "nix";
     my $bam =  $dir . $lib . '_m2n240_4.bam';
@@ -67,7 +55,7 @@ foreach my $lib (@lib){
   system("java -Djava.io.tmpdir=$tempDir -jar $createDict REFERENCE=$refs OUTPUT=$dict");
   system("java -jar $readGroups INPUT=target.newduped.bam OUTPUT=$bam RGID=$lib RGLB=beads RGPL=illumina RGPU=lane2 RGSM=$lib");
   system("samtools index $bam");
-#system("rm target.duped.bam target.sorted.bam target.genome target.sorted.bam.bai target_pair.sam target_solo.sam outPairedSam1 outSoloSam1 target_pair.bam target_solo.bam target.metric target.bam target.newduped.bam target.newduped.bam.bai");
+system("rm target.duped.bam target.sorted.bam target.genome target.sorted.bam.bai target_pair.sam target_solo.sam outPairedSam1 outSoloSam1 target_pair.bam target_solo.bam target.metric target.bam target.newduped.bam target.newduped.bam.bai");
 
     my $newcov = $dir . $lib . '.newcov';
     my $vcf = $dir . $lib . '.filter.vcf';
@@ -91,7 +79,7 @@ foreach my $lib (@lib){
    system("java -Djava.io.tmpdir=$tempDir -Xmx8g -jar $gatk -T VariantAnnotator -A DepthPerAlleleBySample -A AlleleBalance -A FisherStrand -A HaplotypeScore -A HardyWeinberg -R $refs -I $bam.realigned.bam --variant $dir$lib.raw.vcf -o $dir$lib.annotated.vcf");
    system("java -Djava.io.tmpdir=$tempDir -jar $gatk -T VariantFiltration -R $refs -o $vcf --variant $dir$lib.annotated.vcf $exp $filterQual $name \"qual\" $exp $filterDp20 $name \"dp20\" $exp $filterDp10 $name \"dp10\" $exp $filterHethigh $name \"hethigh\" $exp $filterHetlow $name \"hetlow\" $exp $filterAltpos $name \"altpos\" $exp $filterAltdef $name \"altdef\" $exp $filterHomhigh $name \"homhigh\" $exp $filterHomlow $name \"homlow\"");
 
-#xcname vcf file
+#name vcf file
    
     my $rawvcf = $dir. $lib . '.filter.vcf';
     my $processvcf2 = $dir . $lib . '.short1.vcf';
@@ -108,7 +96,7 @@ foreach my $lib (@lib){
    open(VCF, "<$vcffil");
     open(NEWVCF, ">>$vcfv2");
 
-#foreach my $vcline (<VCF>)    {
+foreach my $vcline (<VCF>)    {
        
        my @tmp = split(/\t/,$vcline);
        my $prea0; my $prea1; my $join; my $newletter; my $newline;
@@ -171,7 +159,7 @@ if ($tmpindelcov[1] > $tmpindelcov[0]) {
     system("bgzip $vcfv3");
     system("tabix -p vcf $zipped");
     system("cat $refs | vcf-consensus $zipped > $newFasta");
-print "now finished with vcf - going";
+print "now finished with vcf - going to run second novoalign";
 
 
 # run novoalign
@@ -202,7 +190,7 @@ print "now finished with vcf - going";
   system("java -Djava.io.tmpdir=$tempDir -jar $createDict  REFERENCE=$nref OUTPUT=$dict2");
   system("java -jar $readGroups  INPUT=target2.newduped.bam OUTPUT=$out2 RGID=$lib RGLB=beads RGPL=illumina RGPU=lane2 RGSM=$lib");
   system("samtools index $out2");
-#system("rm target.duped.bam target.sorted.bam target.genome target.sorted.bam.bai target_pair.sam target_solo.sam outPairedSam1 outSoloSam1 target_pair.bam target_solo.bam target.metric target.bam target.newduped.bam target.newduped.bam.bai");
+system("rm target.duped.bam target.sorted.bam target.genome target.sorted.bam.bai target_pair.sam target_solo.sam outPairedSam1 outSoloSam1 target_pair.bam target_solo.bam target.metric target.bam target.newduped.bam target.newduped.bam.bai");
 
 ## run snpcaller again
     my $contigDir = $dir;
@@ -353,8 +341,7 @@ if ($tmp[7] =~ m/PhasingInconsistent/) {
 #####
 ### now use vcf-consensus to print out new file
  my $new2Fasta = $dir . $lib . '.newFasta2.fa';
- my $getnoemptylines = "\'\^\$\'";
-  system("cat $columnName $vcfv5 | grep -v $getnoemptylines > $vcfv6");
+   system("cat $columnName $vcfv5 | grep -v $getnoemptylines > $vcfv6");
    my $zipped2 = $vcfv6 . '.gz';
 system("bgzip $vcfv6");
 system("tabix -p vcf $zipped2");
